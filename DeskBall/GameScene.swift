@@ -8,82 +8,187 @@
 
 import SpriteKit
 import GameplayKit
+struct  PhysicsCategory {
+    // static let BulletRed :UInt32 = 0x1 << 1 // Alien的子弹
+    static let player:UInt32 = 0x1 << 2
+    static let npc     :UInt32 = 0x1 << 3
+    static let hole :UInt32 = 0x1 << 4
+}
 
-class GameScene: SKScene {
+class GameScene: SKScene ,SKPhysicsContactDelegate{
     
-    private var label : SKLabelNode?
-    private var spinnyNode : SKShapeNode?
+    
+    var playerNode :SKSpriteNode!
+    var stepNumber = 0
+    
+
+    
+    let holeName   = "hole"
+    let playerName = "player"
+    let npcName    = "npc"
+
+    let npcItemSize = CGSize(width: 50, height: 50)
+    
+    
     
     override func didMove(to view: SKView) {
         
-        // Get label node from scene and store it for use later
-        self.label = self.childNode(withName: "//helloLabel") as? SKLabelNode
-        if let label = self.label {
-            label.alpha = 0.0
-            label.run(SKAction.fadeIn(withDuration: 2.0))
+        self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)  /// 物理世界的重力
+        self.physicsBody = SKPhysicsBody(edgeLoopFrom: self.frame)
+        self.physicsWorld.contactDelegate = self;
+
+        
+        createBackNode()
+        createPLayer()
+        createHole()
+        createNpc()
+    }
+    //:创建背景
+    func createBackNode()  {
+        let backNode = SKSpriteNode(texture: SKTexture(imageNamed: "DeskBack"), size: CGSize(width: 1024, height: 1024))
+        backNode.position = CGPoint(x: view!.frame.width/2, y: view!.frame.height/2)
+        backNode.zPosition = -1
+        addChild(backNode)
+    }
+    //:创建 plaer
+    func createPLayer()  {
+        playerNode = SKSpriteNode(texture: SKTexture(imageNamed: "player"), size: npcItemSize)
+        playerNode.position = CGPoint(x: view!.frame.width/2, y: view!.frame.height/2)
+        addChild(playerNode)
+        //:创建 physicalBody
+        playerNode.physicsBody = SKPhysicsBody(texture: playerNode.texture!, size: playerNode.size)
+        playerNode.physicsBody?.allowsRotation = true  //禁止旋转
+        playerNode.physicsBody?.categoryBitMask = PhysicsCategory.player
+        playerNode.physicsBody?.contactTestBitMask = PhysicsCategory.npc | PhysicsCategory.hole
+        playerNode.physicsBody?.isDynamic = true
+
+    }
+    //:创建 hole
+    func createHole()  {
+        
+        let holeNode0 = SKSpriteNode(texture: SKTexture(imageNamed: "hole"), size: npcItemSize)
+        holeNode0.position = CGPoint(x: 25, y: 25)
+        holeNode0.name     = holeName
+        addChild(holeNode0)
+        
+        let holeNode1 = SKSpriteNode(texture: SKTexture(imageNamed: "hole"), size: npcItemSize)
+        holeNode1.position = CGPoint(x: view!.frame.width - 25, y: 25)
+        holeNode1.name     = ""
+        addChild(holeNode1)
+        
+        let holeNode2 = SKSpriteNode(texture: SKTexture(imageNamed: "hole"), size: npcItemSize)
+        holeNode2.position = CGPoint(x: 25, y: view!.frame.height - 25)
+        holeNode2.name     = holeName
+        addChild(holeNode2)
+
+        let holeNode3 = SKSpriteNode(texture: SKTexture(imageNamed: "hole"), size: npcItemSize)
+        holeNode3.position = CGPoint(x: view!.frame.width - 25, y: view!.frame.height - 25)
+        holeNode3.name     = holeName
+        addChild(holeNode3)
+        
+        //:创建 physicalBody
+        holeNode0.physicsBody = SKPhysicsBody(texture: holeNode0.texture!, size: holeNode0.size)
+        holeNode0.physicsBody?.allowsRotation = false  //禁止旋转
+        holeNode0.physicsBody?.categoryBitMask = PhysicsCategory.hole
+        holeNode0.physicsBody?.contactTestBitMask = PhysicsCategory.npc | PhysicsCategory.player
+        holeNode0.physicsBody?.isDynamic = false
+
+        holeNode1.physicsBody = SKPhysicsBody(texture: holeNode1.texture!, size: holeNode1.size)
+        holeNode1.physicsBody?.allowsRotation = false  //禁止旋转
+        holeNode1.physicsBody?.categoryBitMask = PhysicsCategory.hole
+        holeNode1.physicsBody?.contactTestBitMask = PhysicsCategory.npc | PhysicsCategory.player
+        holeNode1.physicsBody?.isDynamic = false
+
+        holeNode2.physicsBody = SKPhysicsBody(texture: holeNode2.texture!, size: holeNode2.size)
+        holeNode2.physicsBody?.allowsRotation = false  //禁止旋转
+        holeNode2.physicsBody?.categoryBitMask = PhysicsCategory.hole
+        holeNode2.physicsBody?.contactTestBitMask = PhysicsCategory.npc | PhysicsCategory.player
+        holeNode2.physicsBody?.isDynamic = false
+
+        holeNode3.physicsBody = SKPhysicsBody(texture: holeNode3.texture!, size: holeNode3.size)
+        holeNode3.physicsBody?.allowsRotation = false  //禁止旋转
+        holeNode3.physicsBody?.categoryBitMask = PhysicsCategory.hole
+        holeNode3.physicsBody?.contactTestBitMask = PhysicsCategory.npc | PhysicsCategory.player
+        holeNode3.physicsBody?.isDynamic = false
+
+
+    }
+    //:创建 npc
+    
+    func createNpc()  {
+
+        for index in 1...5 {
+          let npcNode = SKSpriteNode(texture: SKTexture(imageNamed: "npc"), size: npcItemSize)
+            npcNode.position = CGPoint(x: view!.frame.width/2, y: CGFloat(50*index))
+            npcNode.name     = npcName
+            addChild(npcNode)
+            npcNode.physicsBody = SKPhysicsBody(texture: npcNode.texture!, size: npcNode.size)
+            npcNode.physicsBody?.allowsRotation = true  //禁止旋转
+            npcNode.physicsBody?.categoryBitMask = PhysicsCategory.npc
+            npcNode.physicsBody?.contactTestBitMask = PhysicsCategory.hole | PhysicsCategory.player
+            npcNode.physicsBody?.isDynamic = true
+            npcNode.physicsBody?.friction  = 1.0
+
+
         }
-        
-        // Create shape node to use during mouse interaction
-        let w = (self.size.width + self.size.height) * 0.05
-        self.spinnyNode = SKShapeNode.init(rectOf: CGSize.init(width: w, height: w), cornerRadius: w * 0.3)
-        
-        if let spinnyNode = self.spinnyNode {
-            spinnyNode.lineWidth = 2.5
+        for index in 1...5 {
+            let npcNode = SKSpriteNode(texture: SKTexture(imageNamed: "npc"), size: npcItemSize)
+            npcNode.position = CGPoint(x: view!.frame.width/2, y:view!.frame.height - CGFloat(50*index))
+            npcNode.name     = npcName
+            addChild(npcNode)
+            npcNode.physicsBody = SKPhysicsBody(texture: npcNode.texture!, size: npcNode.size)
+            npcNode.physicsBody?.allowsRotation = true  //禁止旋转
+            npcNode.physicsBody?.categoryBitMask = PhysicsCategory.npc
+            npcNode.physicsBody?.contactTestBitMask = PhysicsCategory.hole | PhysicsCategory.player
+            npcNode.physicsBody?.isDynamic = true
+            npcNode.physicsBody?.friction  = 1.0
             
-            spinnyNode.run(SKAction.repeatForever(SKAction.rotate(byAngle: CGFloat(Double.pi), duration: 1)))
-            spinnyNode.run(SKAction.sequence([SKAction.wait(forDuration: 0.5),
-                                              SKAction.fadeOut(withDuration: 0.5),
-                                              SKAction.removeFromParent()]))
-        }
-    }
-    
-    
-    func touchDown(atPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.green
-            self.addChild(n)
-        }
-    }
-    
-    func touchMoved(toPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.blue
-            self.addChild(n)
-        }
-    }
-    
-    func touchUp(atPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.red
-            self.addChild(n)
-        }
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let label = self.label {
-            label.run(SKAction.init(named: "Pulse")!, withKey: "fadeInOut")
         }
         
-        for t in touches { self.touchDown(atPoint: t.location(in: self)) }
     }
-    
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchMoved(toPoint: t.location(in: self)) }
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+
+        guard let touch = touches.first else {
+            return
+        }
+        let touchLocation = touch.location(in: self)
+        playerNode.physicsBody?.applyImpulse(CGVector(dx: touchLocation.x - playerNode.position.x, dy: touchLocation.y - playerNode.position.y))
+        stepNumber += 1
     }
+
     
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
+    func didBegin(_ contact: SKPhysicsContact) {
+        var bodyA : SKPhysicsBody
+        var bodyB : SKPhysicsBody
+        
+        if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask{
+            bodyA = contact.bodyA
+            bodyB = contact.bodyB
+        }else {
+            bodyA = contact.bodyB
+            bodyB = contact.bodyA
+        }
+        if bodyA.categoryBitMask == PhysicsCategory.npc && bodyB.categoryBitMask == PhysicsCategory.hole{
+            print("球进了")
+            bodyA.node?.removeFromParent()
+        }
+        if bodyA.categoryBitMask == PhysicsCategory.hole && bodyB.categoryBitMask == PhysicsCategory.npc{
+            print("球进了")
+            bodyB.node?.removeFromParent()
+        }
+        if bodyA.categoryBitMask == PhysicsCategory.hole && bodyB.categoryBitMask == PhysicsCategory.player{
+            print("你输了")
+            bodyB.node?.removeFromParent()
+        }
+        if bodyA.categoryBitMask == PhysicsCategory.player && bodyB.categoryBitMask == PhysicsCategory.hole{
+            print("你输了")
+            bodyA.node?.removeFromParent()
+        }
+
     }
-    
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
-    }
+    //:输了就直接跳页面
+
     
     
-    override func update(_ currentTime: TimeInterval) {
-        // Called before each frame is rendered
-    }
+    
 }
