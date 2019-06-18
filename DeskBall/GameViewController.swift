@@ -16,7 +16,7 @@ class GameViewController: UIViewController {
         super.viewDidLoad()
         
         
-        let secen = GameScene(size: view.bounds.size)
+        let secen = StartScene(size: view.bounds.size)
         
         let skview = view as! SKView
         

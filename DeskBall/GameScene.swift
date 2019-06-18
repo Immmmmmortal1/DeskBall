@@ -179,15 +179,24 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
         if bodyA.categoryBitMask == PhysicsCategory.hole && bodyB.categoryBitMask == PhysicsCategory.player{
             print("你输了")
             bodyB.node?.removeFromParent()
+            self.jumpScen()
         }
         if bodyA.categoryBitMask == PhysicsCategory.player && bodyB.categoryBitMask == PhysicsCategory.hole{
             print("你输了")
             bodyA.node?.removeFromParent()
+            self.jumpScen()
         }
 
     }
     //:输了就直接跳页面
 
+    func jumpScen()  {
+        let reveal = SKTransition.moveIn(with: SKTransitionDirection.down, duration: 0.5)
+        let mainScene = OverScene(size: self.size)
+        mainScene.scaleMode = .aspectFill
+        mainScene.allNumberStep = stepNumber
+        self.view?.presentScene(mainScene, transition: reveal)
+    }
     
     
     
