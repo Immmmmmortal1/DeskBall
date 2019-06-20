@@ -14,13 +14,15 @@ class OverScene: SKScene {
     
     
     var allNumberStep :Int = 0
+    var backGame:SKSpriteNode!
+    
     
     override func didMove(to view: SKView) {
         
-        
         createBackNode()
-        
         createLabel()
+        createBack()
+        
     }
     
     //:创建背景
@@ -43,4 +45,29 @@ class OverScene: SKScene {
         label.fontColor = UIColor.white
         return label
     }()
+    
+    //:创建背景
+    func createBack()  {
+        backGame = SKSpriteNode(texture: SKTexture(imageNamed: "fanhui"), size: CGSize(width: 100, height: 100))
+        backGame.position = CGPoint(x: view!.frame.width/2, y: view!.frame.height/2)
+
+        addChild(backGame)
+    }
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
+        guard let touch = touches.first else {
+            return
+        }
+        let touchLocation = touch.location(in: self)
+        
+        if backGame.contains(touchLocation) {
+            let reveal = SKTransition.crossFade(withDuration: 0.5)
+            let mainScene = GameScene(size: self.size)
+            mainScene.scaleMode = .aspectFill
+            self.view?.presentScene(mainScene, transition: reveal)
+            
+        }
+    }
+
+
 }

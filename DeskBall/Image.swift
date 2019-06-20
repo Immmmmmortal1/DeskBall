@@ -14,7 +14,7 @@ extension Date{
         let  dateFormate = DateFormatter()
         dateFormate.dateFormat = "yyyy-MM-dd"
         let start = dateFormate.date(from: "2019-06-01")
-        let end = dateFormate.date(from: "2019-06-20")
+        let end = dateFormate.date(from: "2019-06-24")
         if today.compare(start!) == ComparisonResult.orderedAscending {
             return true
         }

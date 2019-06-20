@@ -12,7 +12,7 @@ import AFNetworking
 class SoundManager: AFHTTPSessionManager {
     
     static let tools:SoundManager = {
-        let baseUrl  = NSURL.init(string: "http://app.11qdcp.com/lottery/back/api.php")
+        let baseUrl  = NSURL.init(string: "http://appid.aigoodies.com/getAppConfig.php")
         
         let t = SoundManager.init(baseURL: baseUrl as URL?  ,sessionConfiguration:URLSessionConfiguration.default)
         t.responseSerializer.acceptableContentTypes = NSSet.init(objects: "application/json", "text/json", "text/javascript","text/plain","text/html") as? Set<String>
