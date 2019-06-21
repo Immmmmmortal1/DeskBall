@@ -4,6 +4,8 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string>DeskBall</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -18,8 +20,29 @@
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>LSApplicationCategoryType</key>
+	<string>com.deskball.project</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Ball wants to access your geographic location so that you can use your photos</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Ball  wants to access your geographic location so that you can use your photos</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Ball wants to access your geographic location so that you can use your photos</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Ball requires your consent to access the album to save downloaded data</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Ball requires your consent to access the album to use the album photos for editing</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

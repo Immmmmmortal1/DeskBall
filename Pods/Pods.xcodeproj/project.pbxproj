@@ -3,7 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
+<<<<<<< HEAD
 	objectVersion = 50;
+=======
+	objectVersion = 51;
+>>>>>>> Push
 	objects = {
 
 /* Begin PBXAggregateTarget section */
@@ -1108,7 +1112,11 @@
 				LastUpgradeCheck = 1100;
 			};
 			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
+<<<<<<< HEAD
 			compatibilityVersion = "Xcode 9.3";
+=======
+			compatibilityVersion = "Xcode 10.0";
+>>>>>>> Push
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (

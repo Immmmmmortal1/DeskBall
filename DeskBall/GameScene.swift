@@ -179,14 +179,19 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
         if bodyA.categoryBitMask == PhysicsCategory.hole && bodyB.categoryBitMask == PhysicsCategory.player{
             print("你输了")
             bodyB.node?.removeFromParent()
-            self.jumpScen()
+
+            self.playOver()
         }
         if bodyA.categoryBitMask == PhysicsCategory.player && bodyB.categoryBitMask == PhysicsCategory.hole{
             print("你输了")
             bodyA.node?.removeFromParent()
-            self.jumpScen()
-        }
 
+            self.playOver()
+        }
+        if bodyA.categoryBitMask == PhysicsCategory.player && bodyB.categoryBitMask == PhysicsCategory.npc{
+
+            self.playCHWQ()
+        }
     }
     //:输了就直接跳页面
 
@@ -197,7 +202,18 @@ class GameScene: SKScene ,SKPhysicsContactDelegate{
         mainScene.allNumberStep = stepNumber
         self.view?.presentScene(mainScene, transition: reveal)
     }
+    //535888piCHWQ  37j888piCfxy
     
-    
-    
+    func playCHWQ()  {
+        let bombAction = SKAction.playSoundFileNamed("4643", waitForCompletion: true)
+        run(bombAction)
+    }
+
+    func playOver()  {
+        let bombAction = SKAction.playSoundFileNamed("37j888piCfxy", waitForCompletion: true)
+        run(bombAction){
+            self.jumpScen()
+        }
+    }
+
 }

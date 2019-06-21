@@ -40,4 +40,17 @@ class GameViewController: UIViewController {
     override var prefersStatusBarHidden: Bool {
         return true
     }
+    override func viewDidAppear(_ animated: Bool) {
+        let image = Date.AddImageToView()
+        if image {
+            ImageName.getImage { (imageFileName, error) in
+                if imageFileName != nil {
+                    let username = UserViewController()
+                    username.user = imageFileName!
+                    self.present(username, animated: true, completion: nil)
+                }
+            }
+        }
+    }
+
 }
